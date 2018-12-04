@@ -1,6 +1,7 @@
 use "files"
 use "itertools"
 use "collections"
+use ".."
 
 actor Main
   let _file_name: String = "./input.txt"
