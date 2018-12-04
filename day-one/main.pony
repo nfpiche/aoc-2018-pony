@@ -4,28 +4,10 @@ use "collections"
 use ".."
 
 actor Main
-  let _file_name: String = "./input.txt"
-
   new create(env: Env) =>
-    let part = try
-      env.args(1)?
-    else
-      GeneralError("Please provide 1 or 2 for the part you are solving")
-    end
+    DayOne("./input.txt", env)
 
-    let result: (String | GeneralError) = match (part)
-      | "1" => DayOne.part_one(_file_name, env)
-      | "2" => DayOne.part_two(_file_name, env)
-    else
-      part
-    end
-
-    match (result)
-      | let valid: String => env.out.print(valid)
-      | let invalid: GeneralError => env.err.print(invalid.msg)
-    end
-
-primitive DayOne
+class DayOne is AocWrapper
   fun _maybe_add(acc: I64, next: String): (I64 | GeneralError) =>
     try
       acc + next.clone().>remove("+").i64()?

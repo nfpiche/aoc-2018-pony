@@ -6,25 +6,9 @@ actor Main
   let _file_name: String = "./input.txt"
 
   new create(env: Env) =>
-    let part = try
-      env.args(1)?
-    else
-      GeneralError("Please provide 1 or 2 for the part you are solving")
-    end
+    DayTwo("./input.txt", env)
 
-    let result: (String | GeneralError) = match (part)
-    | "1" => DayTwo.part_one(_file_name, env)
-    | "2" => DayTwo.part_two(_file_name, env)
-    else
-      part
-    end
-
-    match (result)
-    | let valid: String => env.out.print(valid)
-    | let invalid: GeneralError => env.err.print(invalid.msg)
-    end
-
-primitive DayTwo
+class DayTwo is AocWrapper
   fun part_one(path: String, env: Env): (String | GeneralError) =>
     try
       let lines = FileHelper.get_lines(path, env)?
@@ -48,7 +32,7 @@ primitive DayTwo
         end
 
         twosCount = twosCount + twos
-        threesCount = twosCount + threes
+        threesCount = threesCount + threes
       end
 
       (twosCount * threesCount).string()
