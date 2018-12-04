@@ -3,8 +3,6 @@ use "itertools"
 use ".."
 
 actor Main
-  let _file_name: String = "./input.txt"
-
   new create(env: Env) =>
     DayTwo("./input.txt", env)
 
