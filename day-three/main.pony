@@ -22,13 +22,14 @@ class DayThree is AocWrapper
         match values
         | None => return GeneralError("Unable to parse out values")
         | (let id: I64, let x: I64, let y: I64, let w: I64, let h: I64) =>
-          env.out.print(x.string() + " " + y.string())
           for i in Range[I64](x, x + w) do
             for j in Range[I64](y, y + h) do
               let key = _make_key(i, j)
-              let count: I64 = try visited_coords(key)? + 1 else 1 end
-              if count == 2 then overlap = overlap + 1 end
-              visited_coords.update(key, count)
+              try
+                if visited_coords.upsert(key, 1, {(a, b) => a + b})? == 2 then
+                  overlap = overlap + 1
+                end
+              end
             end
           end
         end
@@ -54,22 +55,24 @@ class DayThree is AocWrapper
           for i in Range[I64](x, x + w) do
             for j in Range[I64](y, y + h) do
               let key = _make_key(i, j)
-              try visited_coords(key)?.>set(id) else visited_coords.update(key, SetIs[I64].>set(id)) end
+              try visited_coords.upsert(key, SetIs[I64].>set(id), {(s, _v) => s.>set(id)})? end
             end
           end
         end
       end
 
       for v in visited_coords.values() do
-        if v.size() > 1 then
-          for id in v.values() do
+        for id in v.values() do
+          if v.size() > 1 then
             ids.unset(id)
           end
-        end
-      end
 
-      for id in ids.values() do
-        return id.string()
+          if ids.size() == 1 then
+            for vv in ids.values() do
+              return vv.string()
+            end
+          end
+        end
       end
 
       GeneralError("Found no singular ids")
