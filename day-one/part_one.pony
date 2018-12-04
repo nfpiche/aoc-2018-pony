@@ -25,10 +25,6 @@ actor Main
       | let invalid: GeneralError => env.err.print(invalid.msg)
     end
 
-class val GeneralError
-  let msg: String
-  new val create(msg': String) => msg = msg'
-
 primitive DayOne
   fun _maybe_add(acc: I64, next: String): (I64 | GeneralError) =>
     try
