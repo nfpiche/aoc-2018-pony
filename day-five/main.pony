@@ -16,29 +16,23 @@ class DayFive is AocWrapper
       match lines.size()
       | 1 =>
         for line in lines.values() do
-          try
-            var formula = line.clone()
-            var a = USize(0)
-            var b = USize(1)
+          let first = line(0)?
+          let cloned: String ref = line.clone()
+          let stack: Array[U8] = []
 
-            repeat
-              let first_character = formula(a)?
-              let second_character = formula(b)?
-
-              if _causes_reaction(first_character, second_character) then
-                formula.cut_in_place(ISize.from[USize](a), ISize.from[USize](b + 1))
-                a = if a == 0 then 0 else a - 1 end
-                b = if b == 1 then 1 else b - 1 end
-              else
-                a = a + 1
-                b = b + 1
+          for c in cloned.values() do
+            if stack.size() == 0 then
+              stack.push(consume c)
+            else
+              let a = stack.pop()?
+              if not _causes_reaction(a, c) then
+                stack.push(consume a)
+                stack.push(consume c)
               end
-            until b >= formula.size() end
-
-            return formula.size().string()
-          else
-            return GeneralError("Unexpected error occurred")
+            end
           end
+
+          return stack.size().string()
         end
       else
         return GeneralError("Should be only one line")
