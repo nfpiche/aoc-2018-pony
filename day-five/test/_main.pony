@@ -12,6 +12,7 @@ actor Main is TestList
   fun tag tests(test: PonyTest) =>
     test(_TestInputOne)
     test(_TestInputTwo)
+    test(_TestInputThree)
 
 class iso _TestInputOne is UnitTest
   fun name(): String => "dabAcCaCBAcCcaDA yields 10"
@@ -33,12 +34,12 @@ class iso _TestInputTwo is UnitTest
     | let err: GeneralError => h.fail(err.msg)
     end
 
-/*class iso _TestInputTwo is UnitTest*/
-  /*fun name(): String => "Example input yields 4455"*/
+class iso _TestInputThree is UnitTest
+  fun name(): String => "Example input yields 4"
 
-  /*fun apply(h: TestHelper) =>*/
-    /*let expectation: String = "NoT iMpLeMeNtEd YeT"*/
-    /*match (DayFive.part_two("./input.txt", h.env))*/
-    /*| let result: String => h.assert_eq[String](result, expectation)*/
-    /*| let err: GeneralError => h.fail(err.msg)*/
-    /*end*/
+  fun apply(h: TestHelper) =>
+    let expectation: String = "4"
+    match (DayFive.part_two("./input.txt", h.env))
+    | let result: String => h.assert_eq[String](result, expectation)
+    | let err: GeneralError => h.fail(err.msg)
+    end
